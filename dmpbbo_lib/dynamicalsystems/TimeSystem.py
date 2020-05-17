@@ -28,20 +28,32 @@ class TimeSystem(DynamicalSystem):
     def __init__(self, tau, count_down=False, name="TimeSystem"):
         super().__init__(1, tau, np.zeros([1,1]), np.ones([1,1]), name)
         self.count_down_ = count_down
+        self.tracking_error = 0
         if (self.count_down_):
             self.set_initial_state(np.ones([1,1]))
             self.set_attractor_state(np.zeros([1,1]))
 
     def differentialEquation(self, x):
         xd = np.zeros([1,1])
+        alpha_x = 2
+        alpha_px = 12
+
+        x_dot = (alpha_x*x)/((1+alpha_px*self.tracking_error)*self.tau_)
+        #x_dot = 1/self.tau_
+
+        if x_dot < 1e-10:
+            x_dot = 1e-10
         if self.count_down_:
             if x>0:
-                xd[0] = -1.0/self.tau_
+                xd[0] = -x_dot
         else:
             if x<1.0:
-                xd[0] = 1.0/self.tau_
+                xd[0] = x_dot
                 
         return xd
+
+    def set_tracking_error(self, e):
+        self.tracking_error = e
 
 #    def analyticalSolution(self, ts):
 #        T = ts.size

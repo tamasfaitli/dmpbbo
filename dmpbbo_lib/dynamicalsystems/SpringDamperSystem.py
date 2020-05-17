@@ -34,9 +34,10 @@ class SpringDamperSystem(DynamicalSystem):
             self.spring_constant_ = damping_coefficient*damping_coefficient/4
         else:
             self.spring_constant_ = spring_constant
+        self.pos_error = np.zeros(self.dim_orig_)
 
     def differentialEquation(self, x):
-        
+        alpha_py = 46
         # Spring-damper system was originally 2nd order, i.e. with [x xd xdd]
         #After rewriting it as a 1st order system it becomes [y z yd zd], with yd = z; 
         # Get 'y' and 'z' parts of the state in 'x'
@@ -46,10 +47,16 @@ class SpringDamperSystem(DynamicalSystem):
         # Compute yd and zd
         # See  http://en.wikipedia.org/wiki/Damped_spring-mass_system#Example:mass_.E2.80.93spring.E2.80.93damper
         # and equation 2.1 of http://www-clmc.usc.edu/publications/I/ijspeert-NC2013.pdf
-        yd = z/self.tau_;
-  
-        zd = (-self.spring_constant_*(y-self.attractor_state_) - self.damping_coefficient_*z)/(self.mass_*self.tau_)
+
+
+        yd = (z+(alpha_py*(self.pos_error)))/self.tau_;
+        #yd = z / self.tau_
+
+        zd = (-self.spring_constant_ * (y - self.attractor_state_) - self.damping_coefficient_*z) / (self.mass_ * self.tau_)
         
         xd = np.concatenate((yd,zd))
   
         return xd
+    
+    def set_pos_error(self, e):
+        self.pos_error = e.squeeze()

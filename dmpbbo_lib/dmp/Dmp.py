@@ -40,10 +40,10 @@ class Dmp(DynamicalSystem,Parameterizable):
         
         dim_orig = self.dim_orig_
 
-        self.goal_system_  = ExponentialSystem(tau,y_init,y_attr,15,'goal')
-        self.gating_system_ = SigmoidSystem(tau,np.ones(1),sigmoid_max_rate,0.9*tau,'gating') 
-        self.phase_system_  = TimeSystem(tau,False,'phase')
-        alpha = 20.0
+        self.goal_system_  = ExponentialSystem(tau,y_init,y_attr,20,'goal')
+        self.gating_system_ = SigmoidSystem(tau,np.ones(1),sigmoid_max_rate,0.9*tau,'gating')
+        self.phase_system_  = TimeSystem(tau,True,'phase')
+        alpha = 20
         self.spring_system_ = SpringDamperSystem(tau,y_init,y_attr,alpha)
         
         self.function_approximators_ = function_apps
@@ -135,7 +135,7 @@ class Dmp(DynamicalSystem,Parameterizable):
         xd[self.PHASE] = self.phase_system_.differentialEquation(x[self.PHASE])
         xd[self.GATING] = self.gating_system_.differentialEquation(x[self.GATING])
 
-        fa_output = self.computeFunctionApproximatorOutput(x[self.PHASE]) 
+        fa_output = self.computeFunctionApproximatorOutput(x[self.PHASE])
 
         # Gate the output of the function approximators
         gating = x[self.GATING]
