@@ -37,7 +37,7 @@ class SpringDamperSystem(DynamicalSystem):
         self.pos_error = np.zeros(self.dim_orig_)
 
     def differentialEquation(self, x):
-        alpha_py = 46
+        alpha_py = 40
         # Spring-damper system was originally 2nd order, i.e. with [x xd xdd]
         #After rewriting it as a 1st order system it becomes [y z yd zd], with yd = z; 
         # Get 'y' and 'z' parts of the state in 'x'

@@ -43,7 +43,7 @@ class Dmp(DynamicalSystem,Parameterizable):
         self.goal_system_  = ExponentialSystem(tau,y_init,y_attr,20,'goal')
         self.gating_system_ = SigmoidSystem(tau,np.ones(1),sigmoid_max_rate,0.9*tau,'gating')
         self.phase_system_  = TimeSystem(tau,True,'phase')
-        alpha = 20
+        alpha = 48 # 9->2dof no plant exp
         self.spring_system_ = SpringDamperSystem(tau,y_init,y_attr,alpha)
         
         self.function_approximators_ = function_apps

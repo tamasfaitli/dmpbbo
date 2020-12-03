@@ -36,13 +36,13 @@ class TimeSystem(DynamicalSystem):
     def differentialEquation(self, x):
         xd = np.zeros([1,1])
         alpha_x = 2
-        alpha_px = 12
+        alpha_px = 20000
 
         x_dot = (alpha_x*x)/((1+alpha_px*self.tracking_error)*self.tau_)
         #x_dot = 1/self.tau_
 
-        if x_dot < 1e-10:
-            x_dot = 1e-10
+        # if x_dot < 1e-10:
+        #     x_dot = 1e-10
         if self.count_down_:
             if x>0:
                 xd[0] = -x_dot
